@@ -10,6 +10,7 @@
 <body>
     
 </body>
+<!-- MDN -->
 <!-- 准备工作 -->
 <script>
     // 1、构造函数
@@ -172,13 +173,28 @@
 
        发展顺序：
         0、回调地狱
-        1、promise 的链式调用解决回调地狱
+        1、promise 的链式调用解决回调地狱（因为还有回调函数，所以不是最优解）
         2、async/await ：回调地狱的终极解决方案
    */
 
-  /*
-    如何使用Promise
-  */
+
+    /*
+        如何使用Promise
+        1、API(语法)
+            1）Promise 的构造函数：Promise(excutor){}
+            excutor函数：执行器函数 (resolve,reject) =>{}
+            resolve函数：内部定义成功时，我们调用的函数 value => {}
+            reject函数：内部定义失败时我们调用的函数 reason => {}
+            excutor会在Promise内部立即同步回调，异步操做在执行器中执行
+            2）Promise.prototype.then方法：(OnResolved,OnRejected) => {}
+            OnResolved函数：成功的回调韩式 value =>{}
+            OnRejected函数：失败的回调函数 reason ={}
+            指定用于得到成功value的成功回调和用于得到失败reason的失败回调，返回一个新的promise对象
+            3）Promise.prototype.catch方法： (OnRejected) =>{}
+            OnRejected函数：失败的回调函数 (reason) =>{}
+            then()的语法糖，相当于：then(undefined, OnRejected)
+
+    */
 </script>
 </html>
 </html>
