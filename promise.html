@@ -193,8 +193,71 @@
             3）Promise.prototype.catch方法： (OnRejected) =>{}
             OnRejected函数：失败的回调函数 (reason) =>{}
             then()的语法糖，相当于：then(undefined, OnRejected)
-
+            4）Promise.resolve方法：（value）=> {}
+            value:成功的数据或promise对象
+            返回一个成功/失败的promise对象
+            5）Promise.reject方法：(reason) => {}
+            reason:失败的原因
+            返回一个失败的promise对象
+            6）Promise.all方法：(promise) => {}
+            promise:包含n个promise数组
+            返回一个新的promise，只有所有的promise都成功才成功，只要有一个失败了就直接失败
+            7）Promise.race方法：(promise) => {}
+            promise:包含n个promise数组
+            返回一个新的promise，第一个完成的promise的结果状态就是最终的结果状态
     */
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('成功的数据');
+            // reject('失败的数据'); // 第二个在这里其实是没有意义的，因为状态只会执行一次
+        },1000)
+    }).then((value) => {
+        console.log('onResolved()1', value);
+    }).catch((reason) => {
+        console.log('onReject()1',reason);
+    })
+    // 产生一个成功值为1的promise对象
+    const p1 = new Promise((resolve, reject) => {
+        resolve(1);
+    })
+    const p2 = Promise.resolve(2); // 语法糖：产生一个成功值为2的promise对象
+    const p3 = Promise.reject(3); // 语法糖：产生一个失败值为3的promise对象
+    // 这个时候p1,p2,p3均为一个promise对象，要想获得具体的值，需要在then或catch中去获取
+    p1.then(value => {console.log('p1:', value)});
+    p2.then(value => {console.log('p2:', value)});
+    // 失败可以有两种打印
+    p3.then(null, (reason) => {console.log('p3:',reason)});
+    p3.catch((reason) => {console.log('p3:', reason)});
+
+    // all：
+    const pAll = Promise.all([p1,p2,p3]);
+    pAll.then(
+        value => {
+            console.log('all onResolved()', value);
+        },
+        reason => {
+            console.log('all Onrejected()', reason); // 出错的那一个返回值（错误原因）
+        }
+        )
+    const pAll2 = Promise.all([p1,p2]);
+    pAll2.then(
+        values => {
+            console.log('all onResolved()', value);// 全部成功，则返回一个数组，与promise数组一致
+        },
+        reason => {
+            console.log('all Onrejected()', reason); // 出错的那一个返回值（错误原因）
+        }
+        )
+    // race:第一个执行完成的是什么就是什么
+    const pRace = Promise.race([p1,p2,p3]);
+    pRace.then(
+        (value) => {
+            console.log(value);
+        },
+        (reason) => {
+            console.log(reason);
+        }
+    )
 </script>
 </html>
 </html>
