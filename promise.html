@@ -135,127 +135,289 @@
    // 4、primise的基本使用
    //  首先创建一个promise对象，放进一个回调函数，回调函数有两个参数，分别是 resolve 和 reject，如果成功，则调用resolve函数，如果失败，则调用 reject函数，他们又会返回一个promise对象，在最开始创建的对象的 then里，可以接收这两个返回的对象，在catch里仅能接收失败返回的对象
    // 1、创建一个新的promise对象
-   const p = new Promise((resolve, reject) => { // 执行器函数
-        // 2、执行异步任务
-        setTimeout(() => {
-            const time = Date.now();
-            // 3.1 成功，调用resolve(value) (如果当前时间为偶数，则为成功，否则代表失败)
-            if(time%2 == 0){
-                resolve('成功的数据，time：'+time);
-            }
-            else{
-            // 3.2 失败，调用reject(reason)
-                reject('失败的数据，time：'+time);
-            }
-        },1000);
+//    const p = new Promise((resolve, reject) => { // 执行器函数
+//         // 2、执行异步任务
+//         setTimeout(() => {
+//             const time = Date.now();
+//             // 3.1 成功，调用resolve(value) (如果当前时间为偶数，则为成功，否则代表失败)
+//             if(time%2 == 0){
+//                 resolve('成功的数据，time：'+time);
+//             }
+//             else{
+//             // 3.2 失败，调用reject(reason)
+//                 reject('失败的数据，time：'+time);
+//             }
+//         },1000);
         
 
-   });
-   p.then(
-       value => { // 接收得到成功的value数据  onResolved
-            console.log('成功的回调',value);
-       },
-       reason => { // 接收得到reason的数据  onRejected
-            console.log('失败的回调', reason);
-       }
-   )
+//    });
+//    p.then(
+//        value => { // 接收得到成功的value数据  onResolved
+//             console.log('成功的回调',value);
+//        },
+//        reason => { // 接收得到reason的数据  onRejected
+//             console.log('失败的回调', reason);
+//        }
+//    )
 
-   /*
-    为什么要用promise
-    1、指定回调函数的方式更灵活
-       旧的：必须在启动异步任务前指定
-       promise：启动异步任务-->返回promise对象-->给promise对象绑定回调函数（甚至可以异步任务结束后指定多个）
-    2、支持链式调用，可以解决回调地狱问题
-       什么是回调地狱：回调函数嵌套使用，外部回调函数异步执行的结果是嵌套的回调函数的执行的条件
-       回调地狱的缺点：不便于阅读，不便于错误处理
-       解决方案：promise链式调用
-       终极解决方案：async/await
+//    /*
+//     为什么要用promise
+//     1、指定回调函数的方式更灵活
+//        旧的：必须在启动异步任务前指定
+//        promise：启动异步任务-->返回promise对象-->给promise对象绑定回调函数（甚至可以异步任务结束后指定多个）
+//     2、支持链式调用，可以解决回调地狱问题
+//        什么是回调地狱：回调函数嵌套使用，外部回调函数异步执行的结果是嵌套的回调函数的执行的条件
+//        回调地狱的缺点：不便于阅读，不便于错误处理
+//        解决方案：promise链式调用
+//        终极解决方案：async/await
 
-       发展顺序：
-        0、回调地狱
-        1、promise 的链式调用解决回调地狱（因为还有回调函数，所以不是最优解）
-        2、async/await ：回调地狱的终极解决方案
-   */
+//        发展顺序：
+//         0、回调地狱
+//         1、promise 的链式调用解决回调地狱（因为还有回调函数，所以不是最优解）
+//         2、async/await ：回调地狱的终极解决方案
+//    */
 
+
+//     /*
+//         如何使用Promise
+//         1、API(语法)
+//             1）Promise 的构造函数：Promise(excutor){}
+//             excutor函数：执行器函数 (resolve,reject) =>{}
+//             resolve函数：内部定义成功时，我们调用的函数 value => {}
+//             reject函数：内部定义失败时我们调用的函数 reason => {}
+//             excutor会在Promise内部立即同步回调，异步操做在执行器中执行
+//             2）Promise.prototype.then方法：(OnResolved,OnRejected) => {}
+//             OnResolved函数：成功的回调韩式 value =>{}
+//             OnRejected函数：失败的回调函数 reason ={}
+//             指定用于得到成功value的成功回调和用于得到失败reason的失败回调，返回一个新的promise对象
+//             3）Promise.prototype.catch方法： (OnRejected) =>{}
+//             OnRejected函数：失败的回调函数 (reason) =>{}
+//             then()的语法糖，相当于：then(undefined, OnRejected)
+//             4）Promise.resolve方法：（value）=> {}
+//             value:成功的数据或promise对象
+//             返回一个成功/失败的promise对象
+//             5）Promise.reject方法：(reason) => {}
+//             reason:失败的原因
+//             返回一个失败的promise对象
+//             6）Promise.all方法：(promise) => {}
+//             promise:包含n个promise数组
+//             返回一个新的promise，只有所有的promise都成功才成功，只要有一个失败了就直接失败
+//             7）Promise.race方法：(promise) => {}
+//             promise:包含n个promise数组
+//             返回一个新的promise，第一个完成的promise的结果状态就是最终的结果状态
+//     */
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve('成功的数据');
+//             // reject('失败的数据'); // 第二个在这里其实是没有意义的，因为状态只会执行一次
+//         },1000)
+//     }).then((value) => {
+//         console.log('onResolved()1', value);
+//     }).catch((reason) => {
+//         console.log('onReject()1',reason);
+//     })
+//     // 产生一个成功值为1的promise对象
+//     const p1 = new Promise((resolve, reject) => {
+//         resolve(1);
+//     })
+//     const p2 = Promise.resolve(2); // 语法糖：产生一个成功值为2的promise对象
+//     const p3 = Promise.reject(3); // 语法糖：产生一个失败值为3的promise对象
+//     // 这个时候p1,p2,p3均为一个promise对象，要想获得具体的值，需要在then或catch中去获取
+//     p1.then(value => {console.log('p1:', value)});
+//     p2.then(value => {console.log('p2:', value)});
+//     // 失败可以有两种打印
+//     p3.then(null, (reason) => {console.log('p3:',reason)});
+//     p3.catch((reason) => {console.log('p3:', reason)});
+
+//     // all：
+//     const pAll = Promise.all([p1,p2,p3]);
+//     pAll.then(
+//         value => {
+//             console.log('all onResolved()', value);
+//         },
+//         reason => {
+//             console.log('all Onrejected()', reason); // 出错的那一个返回值（错误原因）
+//         }
+//         )
+//     const pAll2 = Promise.all([p1,p2]);
+//     pAll2.then(
+//         values => {
+//             console.log('all onResolved()', value);// 全部成功，则返回一个数组，与promise数组一致
+//         },
+//         reason => {
+//             console.log('all Onrejected()', reason); // 出错的那一个返回值（错误原因）
+//         }
+//         )
+//     // race:第一个执行完成的是什么就是什么
+//     const pRace = Promise.race([p1,p2,p3]);
+//     pRace.then(
+//         (value) => {
+//             console.log(value);
+//         },
+//         (reason) => {
+//             console.log(reason);
+//         }
+//     )
 
     /*
-        如何使用Promise
-        1、API(语法)
-            1）Promise 的构造函数：Promise(excutor){}
-            excutor函数：执行器函数 (resolve,reject) =>{}
-            resolve函数：内部定义成功时，我们调用的函数 value => {}
-            reject函数：内部定义失败时我们调用的函数 reason => {}
-            excutor会在Promise内部立即同步回调，异步操做在执行器中执行
-            2）Promise.prototype.then方法：(OnResolved,OnRejected) => {}
-            OnResolved函数：成功的回调韩式 value =>{}
-            OnRejected函数：失败的回调函数 reason ={}
-            指定用于得到成功value的成功回调和用于得到失败reason的失败回调，返回一个新的promise对象
-            3）Promise.prototype.catch方法： (OnRejected) =>{}
-            OnRejected函数：失败的回调函数 (reason) =>{}
-            then()的语法糖，相当于：then(undefined, OnRejected)
-            4）Promise.resolve方法：（value）=> {}
-            value:成功的数据或promise对象
-            返回一个成功/失败的promise对象
-            5）Promise.reject方法：(reason) => {}
-            reason:失败的原因
-            返回一个失败的promise对象
-            6）Promise.all方法：(promise) => {}
-            promise:包含n个promise数组
-            返回一个新的promise，只有所有的promise都成功才成功，只要有一个失败了就直接失败
-            7）Promise.race方法：(promise) => {}
-            promise:包含n个promise数组
-            返回一个新的promise，第一个完成的promise的结果状态就是最终的结果状态
+        Promise 的几个关键问题
+        1、如何改变promise的状态
+            1）resolve(value)：如果当前是pendding就会变为resolved
+            2）reject(reason)：如果当前是pendding就会变为rejected
+            3）抛出异常：如果当前是pendding就会变为rejected
+        2、一个promise指定多个成功/失败的回调，都会调用吗？
+            当promise改变为对应状态时都会调用
+        3、改变promise状态和指定回调函数谁先谁后
+            1）都有可能，正常情况下是先指定回调函数再改变状态，但是也可以先改变状态再指定回调函数
+            2）如何先改变状态再指定回调函数
+                在执行器中直接调用resolve()/reject()
+                延迟更长时间再调用then()
+            3）什么时候才能得到数据
+                如果先指定的回调，那当状态发生改变时，回调函数就会调用，得到数据
+                如果先改变状态，那当指定回调时，回调函数就会调用，得到数据
+        4、promise.then()返回的新promise的结果状态由什么决定
+                简单表述：由then()指定的回调函数执行的结果决定
+                详细表述：
+                    如果抛出异常，新promise变为rejected，reason为抛出的异常
+                    如果返回的是非promise的任意值，新promise变为resolved，value为返回的值
+                    如果返回的是另一个新的promise，此promise的结果就会成为新的promise的结果
+        5、promise如果串联多个操做任务
+            1）promise的then()返回一个新的promise，可以形成then()的链式调用
+            2）通过then的链式调用串联多个异步/同步任务
+        6、promise异常传透
+            1）当使用promise的then链式调用时，可以在最后指定失败的回调
+            2）前面任何操做出现了异常，都会传到最后失败的回调中处理
+        7、中断promise链？
+            1）当使用promise的then链式调用时，在中间中断，不再第调用后面的回调函数
+            2）办法：在回调函数中返回一个pendding状态的promise对象
     */
-    new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('成功的数据');
-            // reject('失败的数据'); // 第二个在这里其实是没有意义的，因为状态只会执行一次
-        },1000)
-    }).then((value) => {
-        console.log('onResolved()1', value);
-    }).catch((reason) => {
-        console.log('onReject()1',reason);
-    })
-    // 产生一个成功值为1的promise对象
-    const p1 = new Promise((resolve, reject) => {
-        resolve(1);
-    })
-    const p2 = Promise.resolve(2); // 语法糖：产生一个成功值为2的promise对象
-    const p3 = Promise.reject(3); // 语法糖：产生一个失败值为3的promise对象
-    // 这个时候p1,p2,p3均为一个promise对象，要想获得具体的值，需要在then或catch中去获取
-    p1.then(value => {console.log('p1:', value)});
-    p2.then(value => {console.log('p2:', value)});
-    // 失败可以有两种打印
-    p3.then(null, (reason) => {console.log('p3:',reason)});
-    p3.catch((reason) => {console.log('p3:', reason)});
+   // 1、如何改变promise的状态
+    // const p1 = new Promise((resolve, reject) => {
+    //     // 除了resolve成功和rejecte失败，还可以抛出异常
+    //     // resolve(1);// 成功
+    //     // reject(2);// 失败
 
-    // all：
-    const pAll = Promise.all([p1,p2,p3]);
-    pAll.then(
+    //     //  理论上可以抛出任何内容，但是一般会抛出error ；throw 3 也是可以的,这里抛出的就是3
+    //     throw new Error('出错了'); // 抛出异常，promise变为rejected失败状态，reason为 抛出的error
+    // });
+    // p1.then(
+    //     (value) => {},
+    //     (reason) => {
+    //     console.log(reason);
+    // });
+    // // 2、一个promise指定多个成功/失败的回调，都会调用吗？会
+    // p1.then(
+    //     (value) => {},
+    //     (reason) => {console.log(reason)})
+    //3、改变promise状态和指定回调函数谁先谁后
+    // 先指定回调，后改变状态
+    // new Promise((resolve, reject)=>{
+    //     setTimeout(()=>{
+    //         resolve(1); // 后改变的状态，改变状态的同时，指定数据，异步执行回调函数
+    //     }, 1000)
+    // }).then((value) => { // 先指定回调函数，保存当前指定的回调函数
+    //     console.log(value);
+    // });
+    // // 先改状态，后指定回调 1
+    // new Promise((resolve, reject)=>{
+    //     resolve(1); // 先改变的状态，指定数据
+    // }).then((value) => { // 后指定回调函数，异步执行回调函数
+    //     console.log(value);
+    // });
+    // // 先改状态，后指定回调 2
+    // const p = new Promise((resolve, reject)=>{
+    //     setTimeout(()=>{
+    //         resolve(1); // 后改变的状态，改变状态的同时，指定数据，异步执行回调函数
+    //     }, 1000)
+    // });
+    // setTimeout(()=> {
+    //     p.then(
+    //         value => {},
+    //         reason => {},
+    //     )
+    // },1100);
+    // 4、promise.then()返回的新promise的结果状态由什么决定
+    // new Promise((resolve, reject) => {
+    //     resolve(1);
+    // }).then(
+    //     (value) => {
+    //         console.log('onResolved1:', value); // 1
+    //         // return 2;
+    //         // return Promise.resolve(3);
+    //         // return Promise.reject(4);
+    //         throw 5;
+    //     },
+    //     (reason) => {
+    //         console.log('onRejected1:', reason);
+    //     }
+    // ).then(
+    //     (value) => {
+    //         console.log('onResolved2:', value); // undefined  2  3   -   -    
+    //     },
+    //     (reason) => {
+    //         console.log('onRejected2:', reason);//  -         -  -   4   5
+    //     }
+    // )
+    // 5、promise如果串联多个操做任务
+    // new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         console.log('执行任务1(异步)');
+    //         resolve(1);
+    //     },1000)
+    // }).then(
+    //     value => {
+    //         console.log('执行任务1(异步)的结果:', value);
+    //         console.log('执行任务2(同步)');
+    //         return 2; // 同步返回只需返回一个值就好，异步需返回一个promise
+    //     }
+    // ).then(
+    //     value => {
+    //         console.log('执行任务2(异步)的结果:', value);
+    //         return new Promise((resolve, reject) => { // 异步需返回一个promise
+    //             // 启动任务3（异步）
+    //             setTimeout(() => {
+    //                 console.log('执行任务3（异步）');
+    //                 resolve(3);
+    //             },1000)
+    //         })
+    //     }
+    // ).then(
+    //     value => {
+    //         console.log('任务3的结果：', value);
+    //     }
+    // )
+    // 6、promise异常传透 异常是逐级传递的
+    new Promise((resolve, reject) => {
+        // resolve(1);
+        reject(1);
+    }).then(
         value => {
-            console.log('all onResolved()', value);
+            console.log('onResolved()1:', value);
+            return 2; // 同步返回只需返回一个值就好，异步需返回一个promise
+        },
+        // 如果失败，且没有写失败的回调，则内部会默认执行一下函数
+        // reason => {throw reason}
+        // 或者
+        reason => Promise.reject(reason)
+    ).then(
+        value => {
+            console.log('onResolved()2', value);
+            return 3; 
+        }
+                
+    ).then(
+        value => {
+            console.log('onResolved()3：', value);
+        }
+    ).catch((reason) => { // catch也会返回一个promise，返回的内容，由里面的函数决定
+        console.log('onRejected()：', reason);
+        return new Promise(() => {}); // 返回一个新的promise，但什么都不写，此时就是pendding状态，不会继续往下执行，在此中断
+    }).then(
+        value => {
+            console.log('catch1', value);
         },
         reason => {
-            console.log('all Onrejected()', reason); // 出错的那一个返回值（错误原因）
-        }
-        )
-    const pAll2 = Promise.all([p1,p2]);
-    pAll2.then(
-        values => {
-            console.log('all onResolved()', value);// 全部成功，则返回一个数组，与promise数组一致
-        },
-        reason => {
-            console.log('all Onrejected()', reason); // 出错的那一个返回值（错误原因）
-        }
-        )
-    // race:第一个执行完成的是什么就是什么
-    const pRace = Promise.race([p1,p2,p3]);
-    pRace.then(
-        (value) => {
-            console.log(value);
-        },
-        (reason) => {
-            console.log(reason);
+            console.log('catch2:', value);
         }
     )
 </script>
