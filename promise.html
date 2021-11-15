@@ -387,39 +387,39 @@
     //     }
     // )
     // 6、promise异常传透 异常是逐级传递的
-    new Promise((resolve, reject) => {
-        // resolve(1);
-        reject(1);
-    }).then(
-        value => {
-            console.log('onResolved()1:', value);
-            return 2; // 同步返回只需返回一个值就好，异步需返回一个promise
-        },
-        // 如果失败，且没有写失败的回调，则内部会默认执行一下函数
-        // reason => {throw reason}
-        // 或者
-        reason => Promise.reject(reason)
-    ).then(
-        value => {
-            console.log('onResolved()2', value);
-            return 3; 
-        }
+    // new Promise((resolve, reject) => {
+    //     // resolve(1);
+    //     reject(1);
+    // }).then(
+    //     value => {
+    //         console.log('onResolved()1:', value);
+    //         return 2; // 同步返回只需返回一个值就好，异步需返回一个promise
+    //     },
+    //     // 如果失败，且没有写失败的回调，则内部会默认执行一下函数
+    //     // reason => {throw reason}
+    //     // 或者
+    //     reason => Promise.reject(reason)
+    // ).then(
+    //     value => {
+    //         console.log('onResolved()2', value);
+    //         return 3; 
+    //     }
                 
-    ).then(
-        value => {
-            console.log('onResolved()3：', value);
-        }
-    ).catch((reason) => { // catch也会返回一个promise，返回的内容，由里面的函数决定
-        console.log('onRejected()：', reason);
-        return new Promise(() => {}); // 返回一个新的promise，但什么都不写，此时就是pendding状态，不会继续往下执行，在此中断
-    }).then(
-        value => {
-            console.log('catch1', value);
-        },
-        reason => {
-            console.log('catch2:', value);
-        }
-    )
+    // ).then(
+    //     value => {
+    //         console.log('onResolved()3：', value);
+    //     }
+    // ).catch((reason) => { // catch也会返回一个promise，返回的内容，由里面的函数决定
+    //     console.log('onRejected()：', reason);
+    //     return new Promise(() => {}); // 返回一个新的promise，但什么都不写，此时就是pendding状态，不会继续往下执行，在此中断
+    // }).then(
+    //     value => {
+    //         console.log('catch1', value);
+    //     },
+    //     reason => {
+    //         console.log('catch2:', value);
+    //     }
+    // )
 </script>
 </html>
 </html>
